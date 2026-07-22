@@ -14,7 +14,7 @@ updates:
       interval: "weekly"
     labels:
       - dependencies
-      - backend
+      - uv
 
   - package-ecosystem: "docker"
     directory: "/"
