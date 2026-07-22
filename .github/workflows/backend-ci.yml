@@ -24,6 +24,10 @@ on:
 permissions:
   pull-requests: write
 
+concurrency:
+  group: backend-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   format:
     runs-on: ubuntu-latest
