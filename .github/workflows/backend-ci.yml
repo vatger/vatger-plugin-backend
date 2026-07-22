@@ -24,9 +24,6 @@ on:
 permissions:
   pull-requests: write
 
-env:
-  DIRECTORY: service
-
 jobs:
   format:
     runs-on: ubuntu-latest
@@ -36,11 +33,9 @@ jobs:
 
       - name: Setup backend
         uses: ./.github/actions/service/setup
-        with:
-          directory: ${{ env.DIRECTORY }}
 
       - name: Run ruff format
-        run: cd ${{ env.DIRECTORY }} && uv run ruff format --diff
+        run: uv run ruff format --diff
 
   check:
     needs: format
@@ -51,11 +46,9 @@ jobs:
         
       - name: Setup backend
         uses: ./.github/actions/service/setup
-        with:
-          directory: ${{ env.DIRECTORY }}
 
       - name: Run ruff check
-        run: cd ${{ env.DIRECTORY }} && uv run ruff check --output-format github
+        run: uv run ruff check --output-format github
       # - name: Run pyright
       #   run: uv run pyright
 
@@ -70,24 +63,17 @@ jobs:
 
       - name: Setup service
         uses: ./.github/actions/service/setup
-        with:
-          directory: ${{ env.DIRECTORY }}
 
       - name: Run unit tests
         uses: ./.github/actions/service/pytest
         with:
-          directory: ${{ env.DIRECTORY }}
           test_type: unit
 
       - name: Run integration tests
         uses: ./.github/actions/service/pytest
         with:
-          directory: ${{ env.DIRECTORY }}
           test_type: integration
 
       - name: Report coverage to OctoCov
         uses: k1LoW/octocov-action@v1
-        with:
-          work-dir: ${{ env.DIRECTORY }}
         continue-on-error: true
-  
