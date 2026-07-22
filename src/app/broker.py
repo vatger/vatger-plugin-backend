@@ -9,4 +9,4 @@ broker = RedisStreamBroker(settings.redis_url)
 schedule_source = RedisScheduleSource(settings.redis_url)
 scheduler = TaskiqScheduler(broker=broker, sources=[schedule_source])
 
-import app.tasks  # noqa: E402, F401
+import app.tasks  # ruff:ignore[module-import-not-at-top-of-file, unused-import]

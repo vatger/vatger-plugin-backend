@@ -162,6 +162,6 @@ def test_from_example():
       "long_name": "Example Rating"
     }
   ]
-}"""  # noqa: E501
+}"""  # ruff:ignore[line-too-long]
 
     DatafeedModel(**json.loads(data))
