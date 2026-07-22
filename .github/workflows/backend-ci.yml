@@ -1,17 +1,25 @@
 name: Backend CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
-    paths:
-      - 'service/**'
-      - '.github/workflows/backend-ci.yml'
-      - '.github/actions/service/**'
+    paths: &backend_paths
+      - "src/**"
+      - "tests/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".dockerignore"
+      - "Dockerfile"
+      - ".github/workflows/backend-ci.yml"
+      - ".github/actions/service/**"
+    paths-ignore: &backend_ignore_paths
+      - "**/*.md"
+      - "**/*.mmd"
+      - "docs/**"
   pull_request:
-    paths:
-      - 'service/**'
-      - '.github/workflows/backend-ci.yml'
-      - '.github/actions/service/**'
+    paths: *backend_paths
+    paths-ignore: *backend_ignore_paths
 
 permissions:
   pull-requests: write
