@@ -13,13 +13,8 @@ on:
       - "Dockerfile"
       - ".github/workflows/backend-ci.yml"
       - ".github/actions/service/**"
-    paths-ignore: &backend_ignore_paths
-      - "**/*.md"
-      - "**/*.mmd"
-      - "docs/**"
   pull_request:
     paths: *backend_paths
-    paths-ignore: *backend_ignore_paths
 
 permissions:
   pull-requests: write
