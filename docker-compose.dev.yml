@@ -1,0 +1,73 @@
+services:
+  backend:
+    build:
+      dockerfile: Dockerfile
+    container_name: vatger-plugin-api
+    ports:
+      - "8022:8000"
+    restart: unless-stopped
+    environment:
+      MONGO_URI: mongodb://mongo:27017
+      MONGO_DATABASE: vtfdps-dev
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+
+
+  worker:
+    build:
+      dockerfile: Dockerfile
+    container_name: vatger-plugin-worker
+    restart: unless-stopped
+    command: taskiq worker app.tkq:broker
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+
+
+  scheduler:
+    build:
+      dockerfile: Dockerfile
+    container_name: vatger-plugin-scheduler
+    restart: unless-stopped
+    command: taskiq scheduler app.broker:scheduler
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+
+
+  redis:
+    container_name: vatger-plugin-redis
+    ports:
+      - "6379:6379"
+    image: redis:7-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  mongo:
+    image: mongo:8
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  frontend:
+    image: ghcr.io/vatger/vatger-plugin-frontend:latest
+    container_name: vatger-plugin-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:

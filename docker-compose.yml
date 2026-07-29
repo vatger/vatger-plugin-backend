@@ -1,0 +1,58 @@
+services:
+  backend:
+    image: ghcr.io/vatger/vatger-plugin-backend:latest
+    container_name: vatger-plugin-api
+    restart: unless-stopped
+    environment:
+      MONGO_URI: ${MONGO_URI}
+      MONGO_DATABASE: ${MONGO_DATABASE}
+      SECRET_KEY: ${SECRET_KEY}
+      PUBLIC_URL: ${PUBLIC_URL}
+      VATSIM_CLIENT_ID: ${VATSIM_CLIENT_ID}
+      VATSIM_CLIENT_SECRET: ${VATSIM_CLIENT_SECRET}
+      VATSIM_REDIRECT_URL: ${VATSIM_REDIRECT_URL}
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  worker:
+    image: ghcr.io/vatger/vatger-plugin-backend:latest
+    container_name: vatger-plugin-worker
+    restart: unless-stopped
+    command: taskiq worker app.tkq:broker app.tasks
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      DATAFEED_URL: ${DATAFEED_URL}
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  scheduler:
+    image: ghcr.io/vatger/vatger-plugin-backend:latest
+    container_name: vatger-plugin-scheduler
+    restart: unless-stopped
+    command: taskiq scheduler app.broker:scheduler
+    environment:
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  redis:
+    container_name: vatger-plugin-redis
+    image: redis:7-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  frontend:
+    image: ghcr.io/vatger/vatger-plugin-frontend:latest
+    container_name: vatger-plugin-frontend
+    ports:
+      - "8022:80"
+    depends_on:
+      - backend
