@@ -13,7 +13,7 @@ from plugin.token.plugin_token_service import (
 )
 from settings import settings
 from users.interfaces.user_repository_interface import UserRepositoryInterface
-from users.user_model import User
+from users.user import User
 
 
 @inject

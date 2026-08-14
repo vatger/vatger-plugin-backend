@@ -8,7 +8,7 @@ from auth.generate_jwt import create_access_token, create_refresh_token
 from auth.vatsim_auth_service import UserData, VatsimAuthService
 from settings import settings
 from users.interfaces.user_repository_interface import UserRepositoryInterface
-from users.user_model import User
+from users.user import User
 
 
 class AuthService:

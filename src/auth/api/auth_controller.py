@@ -11,7 +11,7 @@ from auth.auth_service import AuthService
 from auth.generate_jwt import create_access_token, create_refresh_token, decode_token
 from containers.dependencies import DependencyContainer
 from settings import settings
-from users.user_model import User
+from users.user import User
 
 if TYPE_CHECKING:
     from auth.auth import AuthTokens

@@ -23,7 +23,7 @@ from plugin.token.plugin_token_service import (
     UnauthorizedException,
 )
 from settings import settings
-from users.user_model import User
+from users.user import User
 
 router = APIRouter(prefix="/plugin-token", tags=["Plugin Token"])
 

@@ -17,7 +17,7 @@ from silent_request.silent_request_model import SilentRequestModel
 from silent_request.silent_request_service import SilentRequestService
 from tests.mocks.repositories.mock_datafeed_repository import MockDatafeedRepository
 from tests.mocks.repositories.mock_silent_request_repository import MockSilentRequestRepository
-from users.user_model import User
+from users.user import User
 
 pytestmark = pytest.mark.unit
 

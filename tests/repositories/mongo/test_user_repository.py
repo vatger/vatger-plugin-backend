@@ -4,7 +4,7 @@ import mongomock
 import pytest
 
 from repositories.mongo.user_repository import MongoUserRepository, UserAlreadyExistsError
-from users.user_model import User
+from users.user import User
 
 pytestmark = pytest.mark.unit
 

@@ -12,7 +12,7 @@ from plugin.token.plugin_token_service import (
 from tests.mocks.repositories.mock_plugin_token_repository import (
     MockPluginTokenRepository,
 )
-from users.user_model import User
+from users.user import User
 
 pytestmark = pytest.mark.unit
 

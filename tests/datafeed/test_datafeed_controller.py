@@ -11,7 +11,7 @@ from datafeed.api.datafeed_controller import router
 from datafeed.api.datafeed_responses import PilotDTO
 from datafeed.datafeed import PilotModel
 from tests.mocks.repositories.mock_datafeed_repository import MockDatafeedRepository
-from users.user_model import User
+from users.user import User
 
 pytestmark = pytest.mark.unit
 

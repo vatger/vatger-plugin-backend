@@ -17,7 +17,7 @@ from silent_request.interfaces.silent_request_service_interface import (
     UserOfflineException,
 )
 from silent_request.silent_request_model import SilentRequestModel
-from users.user_model import User
+from users.user import User
 
 
 class SilentRequestService(SilentRequestServiceInterface):

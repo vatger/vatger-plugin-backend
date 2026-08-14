@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Literal
 
 from plugin.token.plugin_token import PluginToken
-from users.user_model import User
+from users.user import User
 
 
 class PluginTokenServiceInterface(ABC):

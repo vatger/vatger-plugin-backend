@@ -6,7 +6,7 @@ from plugin.token.generate_token import generate_token
 from plugin.token.interfaces.plugin_token_repository_interface import PluginTokenRepositoryInterface
 from plugin.token.interfaces.plugin_token_service_interface import PluginTokenServiceInterface
 from plugin.token.plugin_token import PluginToken
-from users.user_model import User
+from users.user import User
 
 
 class InvalidTokenException(Exception): ...

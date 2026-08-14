@@ -19,7 +19,7 @@ from silent_request.interfaces.silent_request_service_interface import (
     UserMustBeControllerException,
     UserOfflineException,
 )
-from users.user_model import User
+from users.user import User
 
 router = APIRouter(prefix="/silent-request", tags=["SilentRequest"])
 

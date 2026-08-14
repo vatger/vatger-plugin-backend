@@ -7,7 +7,7 @@ from api.guards import get_user
 from containers.dependencies import DependencyContainer
 from datafeed.api.datafeed_responses import PilotDTO
 from interfaces.repositories.datafeed_repository_interface import DatafeedRepositoryInterface
-from users.user_model import User
+from users.user import User
 
 router = APIRouter(prefix="/datafeed", tags=["Datafeed"])
 
