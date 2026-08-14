@@ -5,7 +5,7 @@ from app.broker import broker
 from containers.dependencies import DependencyContainer
 
 if TYPE_CHECKING:
-    from models.datafeed import DatafeedModel
+    from datafeed.datafeed import DatafeedModel
 
 container = DependencyContainer()
 logger = logging.getLogger(__name__)

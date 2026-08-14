@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from models.datafeed import ControllerModel, DatafeedModel, PilotModel
+from datafeed.datafeed import ControllerModel, DatafeedModel, PilotModel
 
 
 class DatafeedRepositoryInterface(ABC):

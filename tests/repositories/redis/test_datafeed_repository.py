@@ -3,7 +3,7 @@ from datetime import UTC, datetime
 import fakeredis
 import pytest
 
-from models.datafeed import ControllerModel, DatafeedModel, PilotModel
+from datafeed.datafeed import ControllerModel, DatafeedModel, PilotModel
 from repositories.redis.datafeed_repository import RedisDatafeedRepository
 
 

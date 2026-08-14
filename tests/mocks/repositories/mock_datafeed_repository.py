@@ -1,5 +1,5 @@
+from datafeed.datafeed import ControllerModel, DatafeedModel, PilotModel
 from interfaces.repositories.datafeed_repository_interface import DatafeedRepositoryInterface
-from models.datafeed import ControllerModel, DatafeedModel, PilotModel
 
 
 class MockDatafeedRepository(DatafeedRepositoryInterface):

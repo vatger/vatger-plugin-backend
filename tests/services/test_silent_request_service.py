@@ -3,6 +3,7 @@ from datetime import UTC, datetime
 
 import pytest
 
+from datafeed.datafeed import ControllerModel, PilotModel
 from interfaces.services.silent_request_service_interface import (
     ControllerOfflineException,
     ExistingRequestException,
@@ -12,7 +13,6 @@ from interfaces.services.silent_request_service_interface import (
     UserMustBeControllerException,
     UserOfflineException,
 )
-from models.datafeed import ControllerModel, PilotModel
 from models.silent_request_model import SilentRequestModel
 from models.user import User
 from services.silent_request_service import SilentRequestService

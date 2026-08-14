@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from models.datafeed import DatafeedModel
+from datafeed.datafeed import DatafeedModel
 
 
 class DatafeedGatewayInterface(ABC):

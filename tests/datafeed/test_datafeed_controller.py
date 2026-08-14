@@ -9,7 +9,7 @@ from api.guards import get_user
 from containers.dependencies import DependencyContainer
 from datafeed.api.datafeed_controller import router
 from datafeed.api.datafeed_responses import PilotDTO
-from models.datafeed import PilotModel
+from datafeed.datafeed import PilotModel
 from models.user import User
 from tests.mocks.repositories.mock_datafeed_repository import MockDatafeedRepository
 
