@@ -5,7 +5,9 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import RedirectResponse
 
 from api.guards import get_optional_user, get_plugin_token, get_user
-from api.models.plugin_token_dto import (
+from containers.dependencies import DependencyContainer
+from models.user import User
+from plugin.token.api.plugin_token_responses import (
     AuthorizePluginDTO,
     AuthorizePluginPollDTO,
     PluginTokenDTO,
@@ -13,8 +15,6 @@ from api.models.plugin_token_dto import (
     PluginTokenStartDTO,
     PollPluginTokenDTO,
 )
-from containers.dependencies import DependencyContainer
-from models.user import User
 from plugin.token.interfaces.plugin_token_service_interface import PluginTokenServiceInterface
 from plugin.token.plugin_token import PluginToken
 from plugin.token.plugin_token_service import (
