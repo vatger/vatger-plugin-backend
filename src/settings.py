@@ -5,6 +5,9 @@ from repositories.mongo.mongo_settings import MongoSettings
 
 
 class Settings(BaseSettings):
+    POSTGRES_DB_URL: str = ""
+    POSTGRES_DB_ECHO: bool = False
+
     mongo: MongoSettings = MongoSettings()
     redis_url: str = "redis://localhost:6379/0"
 
