@@ -25,7 +25,7 @@ def delete_user(
     cid: int,
     user_repo: Annotated[
         UserRepositoryInterface,
-        Depends(Provide(DependencyContainer.mongo_container.user_repository)),
+        Depends(Provide(DependencyContainer.user_repository)),
     ],
     pt_repo: Annotated[
         PluginTokenRepositoryInterface,
@@ -70,7 +70,7 @@ def gdpr_get_user_data(
     cid: int,
     user_repo: Annotated[
         UserRepositoryInterface,
-        Depends(Provide(DependencyContainer.mongo_container.user_repository)),
+        Depends(Provide(DependencyContainer.user_repository)),
     ],
     pt_repo: Annotated[
         PluginTokenServiceInterface,

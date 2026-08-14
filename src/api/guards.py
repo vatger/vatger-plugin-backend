@@ -49,7 +49,7 @@ def get_user_from_token(
     token: Annotated[PluginToken, Depends(get_plugin_token)],
     user_repository: Annotated[
         UserRepositoryInterface,
-        Depends(Provide(DependencyContainer.mongo_container.user_repository)),
+        Depends(Provide(DependencyContainer.user_repository)),
     ],
 ):
     user = user_repository.get_user(token.user)
@@ -64,7 +64,7 @@ def get_user_from_token(
 def get_user(
     user_repository: Annotated[
         UserRepositoryInterface,
-        Depends(Provide(DependencyContainer.mongo_container.user_repository)),
+        Depends(Provide(DependencyContainer.user_repository)),
     ],
     access_token: Annotated[str | None, Cookie(alias=settings.COOKIE_NAME_ACCESS)] = None,
 ) -> User:
@@ -104,7 +104,7 @@ def get_user(
 def get_optional_user(
     user_repository: Annotated[
         UserRepositoryInterface,
-        Depends(Provide(DependencyContainer.mongo_container.user_repository)),
+        Depends(Provide(DependencyContainer.user_repository)),
     ],
     access_token: Annotated[str | None, Cookie(alias=settings.COOKIE_NAME_ACCESS)] = None,
 ) -> User | None:

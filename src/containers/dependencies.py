@@ -2,11 +2,13 @@ from dependency_injector import containers, providers
 
 from auth.auth_service import AuthService
 from auth.vatsim_auth_service import VatsimAuthService
+from containers.database import Database
 from containers.datafeed import DatafeedContainer
 from containers.mongodb_container import MongoDBContainer
 from plugin.token.plugin_token_service import PluginTokenService
 from settings import Settings
 from silent_request.silent_request_service import SilentRequestService
+from users.user_repository import PostgresUserRepository
 
 
 class DependencyContainer(containers.DeclarativeContainer):
@@ -17,10 +19,18 @@ class DependencyContainer(containers.DeclarativeContainer):
     mongo_container = providers.Container(MongoDBContainer, config=config)
     datafeed_container = providers.Container(DatafeedContainer, config=config)
 
+    db = providers.Singleton(
+        Database, db_url=config.POSTGRES_DB_URL, db_echo=config.POSTGRES_DB_ECHO
+    )
+
+    session_factory = db.provided.session
+
+    user_repository = providers.Factory(PostgresUserRepository, session_factory=session_factory)
+
     # OAuth
     vatsim_service = providers.Singleton(VatsimAuthService)
     auth_service = providers.Singleton(
-        AuthService, vatsim_service=vatsim_service, user_repo=mongo_container.user_repository
+        AuthService, vatsim_service=vatsim_service, user_repo=user_repository
     )
 
     # Plugin Token

@@ -66,7 +66,7 @@ def client(mock_user_repository, mock_auth_service):
 
     container = DependencyContainer()
     container.wire(modules=["auth.api.auth_controller"])
-    container.mongo_container.user_repository.override(mock_user_repository)
+    container.user_repository.override(mock_user_repository)
     container.auth_service.override(mock_auth_service)
 
     with TestClient(app, raise_server_exceptions=False, follow_redirects=False) as c:

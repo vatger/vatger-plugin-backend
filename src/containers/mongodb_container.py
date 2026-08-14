@@ -3,7 +3,6 @@ from pymongo import MongoClient
 
 from repositories.mongo.plugin_token_repository import MongoPluginTokenRepository
 from repositories.mongo.silent_request_repository import MongoSilentRequestRepository
-from repositories.mongo.user_repository import MongoUserRepository
 
 
 class MongoDBContainer(containers.DeclarativeContainer):
@@ -19,13 +18,6 @@ class MongoDBContainer(containers.DeclarativeContainer):
         mongo_client,
         name=config.mongo.database,
     )
-
-    user_collection = providers.Singleton(
-        lambda db: db["user"],
-        mongo_database,
-    )
-
-    user_repository = providers.Singleton(MongoUserRepository, collection=user_collection)
 
     # Plugin Token
 
