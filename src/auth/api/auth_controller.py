@@ -6,7 +6,7 @@ from fastapi.responses import RedirectResponse
 from jose import JWTError
 
 from api.guards import get_user
-from api.models.user_dto import UserInfoDTO
+from auth.api.auth_responses import UserInfoDTO
 from auth.auth_service import AuthService
 from containers.dependencies import DependencyContainer
 from core.security import create_access_token, create_refresh_token, decode_token
@@ -14,7 +14,7 @@ from models.user import User
 from settings import settings
 
 if TYPE_CHECKING:
-    from auth.auth_model import AuthModel
+    from auth.auth import AuthTokens
 
 router = APIRouter(tags=["Auth"])
 
@@ -53,7 +53,7 @@ def vatsim_connect_callback(
     ],
     state: str | None = None,
 ):
-    token: AuthModel = auth_service.authenticate(code)
+    token: AuthTokens = auth_service.authenticate(code)
 
     response = RedirectResponse(state) if state else RedirectResponse("/")
 

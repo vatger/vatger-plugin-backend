@@ -58,14 +58,14 @@ def valid_refresh_token(mock_user):
 
 @pytest.fixture
 def client(mock_user_repository, mock_auth_service):
-    from api.v1.auth_controller import router
+    from auth.api.auth_controller import router
     from containers.dependencies import DependencyContainer
 
     app = FastAPI()
     app.include_router(router)
 
     container = DependencyContainer()
-    container.wire(modules=["api.v1.auth_controller"])
+    container.wire(modules=["auth.api.auth_controller"])
     container.mongo_container.user_repository.override(mock_user_repository)
     container.auth_service.override(mock_auth_service)
 

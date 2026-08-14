@@ -2,9 +2,9 @@ from fastapi import FastAPI
 
 from api.router import main_router
 from api.v1 import (
-    auth_controller,
     silent_request_controller,
 )
+from auth.api import auth_controller
 from containers.dependencies import DependencyContainer
 from datafeed.api import datafeed_controller
 from gdpr import gdpr_controller

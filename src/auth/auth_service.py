@@ -3,7 +3,7 @@ from urllib.parse import urlencode
 
 from fastapi import HTTPException
 
-from auth.auth_model import AuthModel
+from auth.auth import AuthTokens
 from auth.vatsim_auth_service import UserData, VatsimAuthService
 from core.security import create_access_token, create_refresh_token
 from interfaces.repositories.user_repository_interface import UserRepositoryInterface
@@ -16,7 +16,7 @@ class AuthService:
         self.vatsim_service = vatsim_service
         self.user_repo = user_repo
 
-    def authenticate(self, code: str) -> AuthModel:
+    def authenticate(self, code: str) -> AuthTokens:
         auth_data = self.vatsim_service.exchange_code(code)
         user_response = self.vatsim_service.get_user(auth_data.access_token)
 
@@ -46,7 +46,7 @@ class AuthService:
 
         return f"{settings.VATSIM_AUTH_URL}/oauth/authorize?{query_string}"
 
-    def _upsert_user_and_generate_tokens(self, user_data: UserData) -> AuthModel:
+    def _upsert_user_and_generate_tokens(self, user_data: UserData) -> AuthTokens:
         cid = user_data.cid
 
         user = self.user_repo.get_user_by_cid(cid)
@@ -64,7 +64,7 @@ class AuthService:
             )
             self.user_repo.add_user(user)
 
-        return AuthModel(
+        return AuthTokens(
             access=create_access_token(cid),
             refresh=create_refresh_token(cid),
         )

@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
 
-class AuthModel(BaseModel):
+class AuthTokens(BaseModel):
     access: str
     refresh: str
