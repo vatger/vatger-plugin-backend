@@ -6,14 +6,14 @@ from jose import JWTError
 
 from auth.generate_jwt import decode_token
 from containers.dependencies import DependencyContainer
-from interfaces.repositories.user_repository_interface import UserRepositoryInterface
-from models.user import User
 from plugin.token.interfaces.plugin_token_service_interface import PluginTokenServiceInterface
 from plugin.token.plugin_token import PluginToken
 from plugin.token.plugin_token_service import (
     UnauthorizedException,
 )
 from settings import settings
+from users.interfaces.user_repository_interface import UserRepositoryInterface
+from users.user_model import User
 
 
 @inject

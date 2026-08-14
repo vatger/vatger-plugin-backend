@@ -6,7 +6,6 @@ from fastapi.responses import RedirectResponse
 
 from api.guards import get_optional_user, get_plugin_token, get_user
 from containers.dependencies import DependencyContainer
-from models.user import User
 from plugin.token.api.plugin_token_responses import (
     AuthorizePluginDTO,
     AuthorizePluginPollDTO,
@@ -24,6 +23,7 @@ from plugin.token.plugin_token_service import (
     UnauthorizedException,
 )
 from settings import settings
+from users.user_model import User
 
 router = APIRouter(prefix="/plugin-token", tags=["Plugin Token"])
 

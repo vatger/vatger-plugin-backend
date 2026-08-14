@@ -2,8 +2,8 @@ import uuid
 
 from pymongo.collection import Collection
 
-from interfaces.repositories.user_repository_interface import UserRepositoryInterface
-from models.user import User
+from users.interfaces.user_repository_interface import UserRepositoryInterface
+from users.user_model import User
 
 
 class UserAlreadyExistsError(Exception):

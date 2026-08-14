@@ -3,7 +3,6 @@ from datetime import UTC, datetime
 from typing import Literal
 
 from interfaces.repositories.datafeed_repository_interface import DatafeedRepositoryInterface
-from models.user import User
 from silent_request.interfaces.silent_request_repository_interface import (
     SilentRequestRepositoryInterface,
 )
@@ -18,6 +17,7 @@ from silent_request.interfaces.silent_request_service_interface import (
     UserOfflineException,
 )
 from silent_request.silent_request_model import SilentRequestModel
+from users.user_model import User
 
 
 class SilentRequestService(SilentRequestServiceInterface):

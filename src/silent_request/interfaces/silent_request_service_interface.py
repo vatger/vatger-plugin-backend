@@ -1,8 +1,8 @@
 import uuid
 from abc import ABC, abstractmethod
 
-from models.user import User
 from silent_request.silent_request_model import SilentRequestModel
+from users.user_model import User
 
 
 class UserOfflineException(Exception): ...

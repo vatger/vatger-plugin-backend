@@ -5,7 +5,6 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from api.guards import get_user
 from containers.dependencies import DependencyContainer
-from models.user import User
 from silent_request.api.silent_request_requests import SilentRequestCreateRequest
 from silent_request.api.silent_request_responses import (
     SilentRequestResponse,
@@ -20,6 +19,7 @@ from silent_request.interfaces.silent_request_service_interface import (
     UserMustBeControllerException,
     UserOfflineException,
 )
+from users.user_model import User
 
 router = APIRouter(prefix="/silent-request", tags=["SilentRequest"])
 

@@ -1,7 +1,7 @@
 import uuid
 from abc import ABC, abstractmethod
 
-from models.user import User
+from users.user_model import User
 
 
 class UserRepositoryInterface(ABC):

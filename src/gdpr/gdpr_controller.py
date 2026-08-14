@@ -5,13 +5,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from containers.dependencies import DependencyContainer
-from interfaces.repositories.user_repository_interface import UserRepositoryInterface
 from plugin.token.interfaces.plugin_token_repository_interface import PluginTokenRepositoryInterface
 from plugin.token.interfaces.plugin_token_service_interface import PluginTokenServiceInterface
 from settings import settings
 from silent_request.interfaces.silent_request_repository_interface import (
     SilentRequestRepositoryInterface,
 )
+from users.interfaces.user_repository_interface import UserRepositoryInterface
 
 router = APIRouter(tags=["VATGER GDPR"])
 

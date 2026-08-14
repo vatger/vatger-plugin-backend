@@ -3,8 +3,8 @@ import uuid
 import mongomock
 import pytest
 
-from models.user import User
 from repositories.mongo.user_repository import MongoUserRepository, UserAlreadyExistsError
+from users.user_model import User
 
 pytestmark = pytest.mark.unit
 

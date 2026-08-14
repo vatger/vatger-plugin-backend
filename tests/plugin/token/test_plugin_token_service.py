@@ -2,7 +2,6 @@ import uuid
 
 import pytest
 
-from models.user import User
 from plugin.token.plugin_token_service import (
     InvalidTokenException,
     PermissionDeniedException,
@@ -13,6 +12,7 @@ from plugin.token.plugin_token_service import (
 from tests.mocks.repositories.mock_plugin_token_repository import (
     MockPluginTokenRepository,
 )
+from users.user_model import User
 
 pytestmark = pytest.mark.unit
 
