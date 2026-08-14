@@ -85,7 +85,7 @@ def authorize_plugin_token(
         ) from None
 
 
-@router.post("/poll/{token_id}", response_model=PollPluginTokenDTO)
+@router.post("/poll/{token_id}")
 @inject
 def plugin_token_poll(
     token_id: str,
