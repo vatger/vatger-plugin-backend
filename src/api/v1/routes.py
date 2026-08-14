@@ -3,9 +3,9 @@ from fastapi import APIRouter
 from api.v1 import (
     auth_controller,
     datafeed_controller,
-    gdpr_controller,
     silent_request_controller,
 )
+from gdpr import gdpr_controller
 from plugin.token.api import plugin_token_controller
 
 router = APIRouter(prefix="/v1")
