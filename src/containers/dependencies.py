@@ -4,7 +4,7 @@ from auth.auth_service import AuthService
 from auth.vatsim_auth_service import VatsimAuthService
 from containers.datafeed import DatafeedContainer
 from containers.mongodb_container import MongoDBContainer
-from services.plugin_token_service import PluginTokenService
+from plugin.token.plugin_token_service import PluginTokenService
 from services.silent_request_service import SilentRequestService
 from settings import Settings
 

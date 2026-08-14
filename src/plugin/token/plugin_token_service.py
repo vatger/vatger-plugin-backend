@@ -3,10 +3,10 @@ import uuid
 from typing import Literal
 
 from core.security import generate_token
-from interfaces.repositories.plugin_token_repository_interface import PluginTokenRepositoryInterface
-from interfaces.services.plugin_token_service_interface import PluginTokenServiceInterface
-from models.plugin_token import PluginToken
 from models.user import User
+from plugin.token.interfaces.plugin_token_repository_interface import PluginTokenRepositoryInterface
+from plugin.token.interfaces.plugin_token_service_interface import PluginTokenServiceInterface
+from plugin.token.plugin_token import PluginToken
 
 
 class InvalidTokenException(Exception): ...

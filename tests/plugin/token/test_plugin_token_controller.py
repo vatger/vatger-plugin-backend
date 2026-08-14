@@ -2,10 +2,10 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from api.v1.plugin_token_controller import router
 from containers.dependencies import DependencyContainer
-from models.plugin_token import PluginToken
-from services.plugin_token_service import UnauthorizedException
+from plugin.token.api.plugin_token_controller import router
+from plugin.token.plugin_token import PluginToken
+from plugin.token.plugin_token_service import UnauthorizedException
 
 pytestmark = pytest.mark.unit
 
@@ -38,7 +38,7 @@ def client(mock_plugin_token_service):
     app.include_router(router)
 
     container = DependencyContainer()
-    container.wire(modules=["api.v1.plugin_token_controller"])
+    container.wire(modules=["plugin.token.api.plugin_token_controller"])
     container.plugin_token_service.override(mock_plugin_token_service)
 
     with TestClient(app) as c:

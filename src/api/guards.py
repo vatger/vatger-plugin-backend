@@ -7,10 +7,10 @@ from jose import JWTError
 from containers.dependencies import DependencyContainer
 from core.security import decode_token
 from interfaces.repositories.user_repository_interface import UserRepositoryInterface
-from interfaces.services.plugin_token_service_interface import PluginTokenServiceInterface
-from models.plugin_token import PluginToken
 from models.user import User
-from services.plugin_token_service import (
+from plugin.token.interfaces.plugin_token_service_interface import PluginTokenServiceInterface
+from plugin.token.plugin_token import PluginToken
+from plugin.token.plugin_token_service import (
     UnauthorizedException,
 )
 from settings import settings

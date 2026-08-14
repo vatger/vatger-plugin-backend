@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Literal
 
-from models.plugin_token import PluginToken
 from models.user import User
+from plugin.token.plugin_token import PluginToken
 
 
 class PluginTokenServiceInterface(ABC):

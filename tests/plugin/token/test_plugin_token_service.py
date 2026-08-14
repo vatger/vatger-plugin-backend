@@ -3,7 +3,7 @@ import uuid
 import pytest
 
 from models.user import User
-from services.plugin_token_service import (
+from plugin.token.plugin_token_service import (
     InvalidTokenException,
     PermissionDeniedException,
     PluginTokenService,

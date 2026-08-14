@@ -3,7 +3,7 @@ import uuid
 import mongomock
 import pytest
 
-from models.plugin_token import PluginToken
+from plugin.token.plugin_token import PluginToken
 from repositories.mongo.plugin_token_repository import MongoPluginTokenRepository
 
 pytestmark = pytest.mark.unit

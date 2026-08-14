@@ -1,10 +1,10 @@
 import copy
 import uuid
 
-from interfaces.repositories.plugin_token_repository_interface import (
+from plugin.token.interfaces.plugin_token_repository_interface import (
     PluginTokenRepositoryInterface,
 )
-from models.plugin_token import PluginToken
+from plugin.token.plugin_token import PluginToken
 
 
 class MockPluginTokenRepository(PluginTokenRepositoryInterface):

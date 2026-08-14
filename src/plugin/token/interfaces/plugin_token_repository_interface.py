@@ -1,7 +1,7 @@
 import uuid
 from abc import ABC, abstractmethod
 
-from models.plugin_token import PluginToken
+from plugin.token.plugin_token import PluginToken
 
 
 class PluginTokenRepositoryInterface(ABC):
