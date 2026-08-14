@@ -2,14 +2,11 @@ import uuid
 
 from pymongo.collection import Collection
 
-from users.interfaces.user_repository_interface import UserRepositoryInterface
+from users.interfaces.user_repository_interface import (
+    UserAlreadyExistsError,
+    UserRepositoryInterface,
+)
 from users.user import User
-
-
-class UserAlreadyExistsError(Exception):
-    def __init__(self, cid: int):
-        super().__init__(f"User with cid {cid} already exists")
-        self.cid = cid
 
 
 class MongoUserRepository(UserRepositoryInterface):
@@ -44,7 +41,7 @@ class MongoUserRepository(UserRepositoryInterface):
             return None
         return self._doc_to_user(doc)
 
-    def get_user_by_cid(self, cid: int) -> User | None:
+    def get_user_by_cid(self, cid: str) -> User | None:
         doc = self.collection.find_one({"cid": cid})
         if not doc:
             return None
