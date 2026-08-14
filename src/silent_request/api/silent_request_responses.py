@@ -4,11 +4,7 @@ from typing import Literal
 from pydantic import BaseModel
 
 
-class SilentRequestCreateDTO(BaseModel):
-    type: Literal["TAXI", "PUSHBACK"]
-
-
-class SilentRequestOutDTO(BaseModel):
+class SilentRequestResponse(BaseModel):
     callsign: str
     departure_icao: str
     type: Literal["TAXI", "PUSHBACK"]

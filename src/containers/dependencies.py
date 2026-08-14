@@ -5,8 +5,8 @@ from auth.vatsim_auth_service import VatsimAuthService
 from containers.datafeed import DatafeedContainer
 from containers.mongodb_container import MongoDBContainer
 from plugin.token.plugin_token_service import PluginTokenService
-from services.silent_request_service import SilentRequestService
 from settings import Settings
+from silent_request.silent_request_service import SilentRequestService
 
 
 class DependencyContainer(containers.DeclarativeContainer):

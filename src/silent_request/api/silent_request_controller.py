@@ -4,9 +4,13 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from api.guards import get_user
-from api.models.silent_request_dto import SilentRequestCreateDTO, SilentRequestOutDTO
 from containers.dependencies import DependencyContainer
-from interfaces.services.silent_request_service_interface import (
+from models.user import User
+from silent_request.api.silent_request_requests import SilentRequestCreateRequest
+from silent_request.api.silent_request_responses import (
+    SilentRequestResponse,
+)
+from silent_request.interfaces.silent_request_service_interface import (
     ControllerOfflineException,
     ExistingRequestException,
     InvalidAirportExpection,
@@ -16,7 +20,6 @@ from interfaces.services.silent_request_service_interface import (
     UserMustBeControllerException,
     UserOfflineException,
 )
-from models.user import User
 
 router = APIRouter(prefix="/silent-request", tags=["SilentRequest"])
 
@@ -25,7 +28,7 @@ router = APIRouter(prefix="/silent-request", tags=["SilentRequest"])
 @inject
 async def create_silent_request(
     user: Annotated[User, Depends(get_user)],
-    request: SilentRequestCreateDTO,
+    request: SilentRequestCreateRequest,
     sr_service: Annotated[
         SilentRequestServiceInterface,
         Depends(Provide[DependencyContainer.silent_request_service]),
@@ -65,7 +68,7 @@ def get_user_silent_request(
     if not request:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No request")
 
-    return SilentRequestOutDTO(**request.model_dump())
+    return SilentRequestResponse(**request.model_dump())
 
 
 @router.delete("", summary="Delete the user's SilentRequest")

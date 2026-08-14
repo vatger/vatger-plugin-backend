@@ -1,7 +1,7 @@
 import uuid
 from abc import ABC, abstractmethod
 
-from models.silent_request_model import SilentRequestModel
+from silent_request.silent_request_model import SilentRequestModel
 
 
 class DuplicateSilentRequestException(Exception): ...

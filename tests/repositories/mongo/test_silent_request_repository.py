@@ -4,11 +4,11 @@ from datetime import UTC, datetime
 import mongomock
 import pytest
 
-from interfaces.repositories.silent_request_repository_interface import (
+from repositories.mongo.silent_request_repository import MongoSilentRequestRepository
+from silent_request.interfaces.silent_request_repository_interface import (
     DuplicateSilentRequestException,
 )
-from models.silent_request_model import SilentRequestModel
-from repositories.mongo.silent_request_repository import MongoSilentRequestRepository
+from silent_request.silent_request_model import SilentRequestModel
 
 pytestmark = pytest.mark.unit
 

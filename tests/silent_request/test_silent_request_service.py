@@ -4,7 +4,8 @@ from datetime import UTC, datetime
 import pytest
 
 from datafeed.datafeed import ControllerModel, PilotModel
-from interfaces.services.silent_request_service_interface import (
+from models.user import User
+from silent_request.interfaces.silent_request_service_interface import (
     ControllerOfflineException,
     ExistingRequestException,
     InvalidAirportExpection,
@@ -13,9 +14,8 @@ from interfaces.services.silent_request_service_interface import (
     UserMustBeControllerException,
     UserOfflineException,
 )
-from models.silent_request_model import SilentRequestModel
-from models.user import User
-from services.silent_request_service import SilentRequestService
+from silent_request.silent_request_model import SilentRequestModel
+from silent_request.silent_request_service import SilentRequestService
 from tests.mocks.repositories.mock_datafeed_repository import MockDatafeedRepository
 from tests.mocks.repositories.mock_silent_request_repository import MockSilentRequestRepository
 

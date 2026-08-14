@@ -4,11 +4,11 @@ from datetime import UTC
 from pymongo.collection import Collection
 from pymongo.errors import DuplicateKeyError
 
-from interfaces.repositories.silent_request_repository_interface import (
+from silent_request.interfaces.silent_request_repository_interface import (
     DuplicateSilentRequestException,
     SilentRequestRepositoryInterface,
 )
-from models.silent_request_model import SilentRequestModel
+from silent_request.silent_request_model import SilentRequestModel
 
 
 class MongoSilentRequestRepository(SilentRequestRepositoryInterface):
