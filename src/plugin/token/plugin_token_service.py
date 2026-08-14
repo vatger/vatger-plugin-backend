@@ -2,8 +2,8 @@ import datetime
 import uuid
 from typing import Literal
 
-from auth.generate_jwt import generate_token
 from models.user import User
+from plugin.token.generate_token import generate_token
 from plugin.token.interfaces.plugin_token_repository_interface import PluginTokenRepositoryInterface
 from plugin.token.interfaces.plugin_token_service_interface import PluginTokenServiceInterface
 from plugin.token.plugin_token import PluginToken
