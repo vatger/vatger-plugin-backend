@@ -6,9 +6,9 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from api.guards import get_user
-from api.models.datafeed_dto import PilotDTO
-from api.v1.datafeed_controller import router
 from containers.dependencies import DependencyContainer
+from datafeed.api.datafeed_controller import router
+from datafeed.api.datafeed_responses import PilotDTO
 from models.datafeed import PilotModel
 from models.user import User
 from tests.mocks.repositories.mock_datafeed_repository import MockDatafeedRepository
@@ -76,7 +76,7 @@ def client(datafeed_repo):
     app.include_router(router)
 
     container = DependencyContainer()
-    container.wire(modules=["api.v1.datafeed_controller"])
+    container.wire(modules=["datafeed.api.datafeed_controller"])
     container.datafeed_container.datafeed_repository.override(datafeed_repo)
 
     def mock_get_user() -> User:

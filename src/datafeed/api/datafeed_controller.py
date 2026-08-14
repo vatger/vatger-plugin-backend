@@ -4,8 +4,8 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends
 
 from api.guards import get_user
-from api.models.datafeed_dto import PilotDTO
 from containers.dependencies import DependencyContainer
+from datafeed.api.datafeed_responses import PilotDTO
 from interfaces.repositories.datafeed_repository_interface import DatafeedRepositoryInterface
 from models.user import User
 
