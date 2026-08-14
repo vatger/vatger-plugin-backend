@@ -1,3 +1,4 @@
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from repositories.mongo.mongo_settings import MongoSettings
@@ -10,7 +11,7 @@ class Settings(BaseSettings):
     datafeed_url: str = "http://df.vatsim-germany.org/datafeed"
 
     PUBLIC_URL: str = "http://localhost:5173"
-    SECRET_KEY: str = "supersecret"
+    JWT_SECRET_KEY: SecretStr = SecretStr("supersecret")
 
     VATSIM_AUTH_URL: str = "https://auth-dev.vatsim.net"
     VATSIM_CLIENT_ID: str = "1363"

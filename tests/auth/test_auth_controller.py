@@ -42,7 +42,7 @@ def mock_auth_service():
 def valid_access_token(mock_user):
     return jwt.encode(
         {"sub": mock_user.cid},
-        settings.SECRET_KEY,
+        settings.JWT_SECRET_KEY.get_secret_value(),
         algorithm=ALGORITHM,
     )
 
@@ -51,7 +51,7 @@ def valid_access_token(mock_user):
 def valid_refresh_token(mock_user):
     return jwt.encode(
         {"sub": mock_user.cid},
-        settings.SECRET_KEY,
+        settings.JWT_SECRET_KEY.get_secret_value(),
         algorithm=ALGORITHM,
     )
 
@@ -162,7 +162,7 @@ class TestGetUserEndpoint:
         assert response.status_code == 401
 
     def test_token_without_sub_returns_401(self, client):
-        token = jwt.encode({}, settings.SECRET_KEY, algorithm=ALGORITHM)
+        token = jwt.encode({}, settings.JWT_SECRET_KEY.get_secret_value(), algorithm=ALGORITHM)
         client.cookies.set(settings.COOKIE_NAME_ACCESS, token)
         response = client.get("/auth/user")
 
@@ -211,7 +211,7 @@ class TestAuthRefresh:
         assert response.status_code == 401
 
     def test_token_without_sub_returns_401(self, client):
-        token = jwt.encode({}, settings.SECRET_KEY, algorithm=ALGORITHM)
+        token = jwt.encode({}, settings.JWT_SECRET_KEY.get_secret_value(), algorithm=ALGORITHM)
         client.cookies.set(settings.COOKIE_NAME_REFRESH, token)
         response = client.post("/auth/refresh")
 

@@ -15,7 +15,7 @@ def create_access_token(cid: str, validity_minutes: int = 10) -> str:
             "admin": True,
             "access": True,
         },
-        settings.SECRET_KEY,
+        settings.JWT_SECRET_KEY.get_secret_value(),
         algorithm=ALGORITHM,
     )
 
@@ -26,10 +26,10 @@ def create_refresh_token(cid: str, validity_minutes: int = 31 * 24 * 60) -> str:
             "sub": cid,
             "exp": datetime.now(UTC) + timedelta(minutes=validity_minutes),
         },
-        settings.SECRET_KEY,
+        settings.JWT_SECRET_KEY.get_secret_value(),
         algorithm=ALGORITHM,
     )
 
 
 def decode_token(token: str) -> dict:
-    return jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
+    return jwt.decode(token, settings.JWT_SECRET_KEY.get_secret_value(), algorithms=[ALGORITHM])
