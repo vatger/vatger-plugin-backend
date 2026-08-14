@@ -4,8 +4,8 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import Cookie, Depends, Header, HTTPException, status
 from jose import JWTError
 
+from auth.generate_jwt import decode_token
 from containers.dependencies import DependencyContainer
-from core.security import decode_token
 from interfaces.repositories.user_repository_interface import UserRepositoryInterface
 from models.user import User
 from plugin.token.interfaces.plugin_token_service_interface import PluginTokenServiceInterface

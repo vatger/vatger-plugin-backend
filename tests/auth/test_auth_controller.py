@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from jose import jwt
 
-from core.security import ALGORITHM
+from auth.generate_jwt import ALGORITHM
 from settings import settings
 
 pytestmark = pytest.mark.unit
