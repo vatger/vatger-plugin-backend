@@ -8,8 +8,8 @@ from fastapi.testclient import TestClient
 from api.guards import get_user
 from containers.dependencies import DependencyContainer
 from datafeed.api.datafeed_controller import router
-from datafeed.api.datafeed_responses import PilotDTO
-from datafeed.datafeed import PilotModel
+from datafeed.api.datafeed_responses import ControllerResponse, PilotResponse
+from datafeed.datafeed import ControllerModel, PilotModel
 from tests.mocks.repositories.mock_datafeed_repository import MockDatafeedRepository
 from users.user import User
 
@@ -135,5 +135,31 @@ def test_response_is_valid_pilot_dto(client, datafeed_repo):
     response = client.get("/datafeed/user/pilot")
 
     assert response.status_code == 200
-    dto = PilotDTO(**response.json())
+    dto = PilotResponse(**response.json())
     assert dto.cid == 1234567
+
+
+def test_response_controller(client, datafeed_repo):
+    user = make_user()
+
+    datafeed_repo.add_controller(
+        ControllerModel(
+            cid=user.cid,
+            name="Test",
+            callsign="EDDF_TWR",
+            frequency="123.450",
+            facility=4,
+            rating=3,
+            server="Germany",
+            visual_range=50,
+            logon_time=datetime.now(UTC),
+            last_updated=datetime.now(UTC),
+        )
+    )
+
+    response = client.get("/datafeed/user/controller")
+
+    assert response.status_code == 200
+    dto = ControllerResponse(**response.json())
+    assert dto.cid == user.cid
+    assert dto.facility == 4
