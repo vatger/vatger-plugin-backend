@@ -33,7 +33,7 @@ def delete_user(
     ],
     sr_repo: Annotated[
         SilentRequestRepositoryInterface,
-        Depends(Provide(DependencyContainer.mongo_container.silent_request_repository)),
+        Depends(Provide(DependencyContainer.silent_request_repository)),
     ],
 ):
     if not settings.GDPR_API_TOKEN:

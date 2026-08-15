@@ -4,10 +4,10 @@ from auth.auth_service import AuthService
 from auth.vatsim_auth_service import VatsimAuthService
 from containers.database import Database
 from containers.datafeed import DatafeedContainer
-from containers.mongodb_container import MongoDBContainer
 from plugin.token.plugin_token_repository import PostgresPluginTokenRepository
 from plugin.token.plugin_token_service import PluginTokenService
 from settings import Settings
+from silent_request.silent_request_repository import PostgresSilentRequestRepository
 from silent_request.silent_request_service import SilentRequestService
 from users.user_repository import PostgresUserRepository
 
@@ -17,7 +17,6 @@ class DependencyContainer(containers.DeclarativeContainer):
 
     config.from_pydantic(Settings())
 
-    mongo_container = providers.Container(MongoDBContainer, config=config)
     datafeed_container = providers.Container(DatafeedContainer, config=config)
 
     db = providers.Singleton(
@@ -29,6 +28,9 @@ class DependencyContainer(containers.DeclarativeContainer):
     user_repository = providers.Factory(PostgresUserRepository, session_factory=session_factory)
     plugin_token_repository = providers.Factory(
         PostgresPluginTokenRepository, session_factory=session_factory
+    )
+    silent_request_repository = providers.Factory(
+        PostgresSilentRequestRepository, session_factory=session_factory
     )
 
     # OAuth
@@ -45,7 +47,7 @@ class DependencyContainer(containers.DeclarativeContainer):
     # SilentRequest
     silent_request_service = providers.Factory(
         SilentRequestService,
-        repository=mongo_container.silent_request_repository,
+        repository=silent_request_repository,
         datafeed_repository=datafeed_container.datafeed_repository,
         allowed_airports=config.SILENT_REQUEST_ALLOWED_AIRPORTS,
     )
