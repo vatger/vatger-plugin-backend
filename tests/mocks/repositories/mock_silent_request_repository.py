@@ -1,34 +1,34 @@
 import uuid
 
-from interfaces.repositories.silent_request_repository_interface import (
+from silent_request.interfaces.silent_request_repository_interface import (
     DuplicateSilentRequestException,
     SilentRequestRepositoryInterface,
 )
-from models.silent_request_model import SilentRequestModel
+from silent_request.silent_request import SilentRequest
 
 
 class MockSilentRequestRepository(SilentRequestRepositoryInterface):
     def __init__(self):
-        self._requests: dict[uuid.UUID, SilentRequestModel] = {}
+        self._requests: dict[uuid.UUID, SilentRequest] = {}
 
-    def create_request(self, request: SilentRequestModel) -> SilentRequestModel:
+    def create_request(self, request: SilentRequest) -> SilentRequest:
         if any(r.callsign == request.callsign for r in self._requests.values()):
             msg = f"Request with callsign '{request.callsign}' already exists"
             raise DuplicateSilentRequestException(msg)
         self._requests[request.user_id] = request
         return request
 
-    def get_request_by_callsign(self, callsign: str) -> SilentRequestModel | None:
+    def get_request_by_callsign(self, callsign: str) -> SilentRequest | None:
         return next((r for r in self._requests.values() if r.callsign == callsign), None)
 
-    def get_request_by_user_id(self, id: uuid.UUID) -> SilentRequestModel | None:
+    def get_request_by_user_id(self, id: uuid.UUID) -> SilentRequest | None:
         return self._requests.get(id)
 
-    def get_requests_by_icao(self, icao: str) -> list[SilentRequestModel] | None:
+    def get_requests_by_icao(self, icao: str) -> list[SilentRequest] | None:
         results = [r for r in self._requests.values() if r.departure_icao == icao]
         return results or None
 
-    def get_all_requests(self) -> list[SilentRequestModel] | None:
+    def get_all_requests(self) -> list[SilentRequest] | None:
         requests = list(self._requests.values())
         return requests or None
 

@@ -4,16 +4,16 @@ from dependency_injector.wiring import Provide, inject
 from fastapi import Cookie, Depends, Header, HTTPException, status
 from jose import JWTError
 
+from auth.generate_jwt import decode_token
 from containers.dependencies import DependencyContainer
-from core.security import decode_token
-from interfaces.repositories.user_repository_interface import UserRepositoryInterface
-from interfaces.services.plugin_token_service_interface import PluginTokenServiceInterface
-from models.plugin_token import PluginToken
-from models.user import User
-from services.plugin_token_service import (
+from plugin.token.interfaces.plugin_token_service_interface import PluginTokenServiceInterface
+from plugin.token.plugin_token import PluginToken
+from plugin.token.plugin_token_service import (
     UnauthorizedException,
 )
 from settings import settings
+from users.interfaces.user_repository_interface import UserRepositoryInterface
+from users.user import User
 
 
 @inject
@@ -49,7 +49,7 @@ def get_user_from_token(
     token: Annotated[PluginToken, Depends(get_plugin_token)],
     user_repository: Annotated[
         UserRepositoryInterface,
-        Depends(Provide(DependencyContainer.mongo_container.user_repository)),
+        Depends(Provide(DependencyContainer.user_repository)),
     ],
 ):
     user = user_repository.get_user(token.user)
@@ -64,7 +64,7 @@ def get_user_from_token(
 def get_user(
     user_repository: Annotated[
         UserRepositoryInterface,
-        Depends(Provide(DependencyContainer.mongo_container.user_repository)),
+        Depends(Provide(DependencyContainer.user_repository)),
     ],
     access_token: Annotated[str | None, Cookie(alias=settings.COOKIE_NAME_ACCESS)] = None,
 ) -> User:
@@ -104,7 +104,7 @@ def get_user(
 def get_optional_user(
     user_repository: Annotated[
         UserRepositoryInterface,
-        Depends(Provide(DependencyContainer.mongo_container.user_repository)),
+        Depends(Provide(DependencyContainer.user_repository)),
     ],
     access_token: Annotated[str | None, Cookie(alias=settings.COOKIE_NAME_ACCESS)] = None,
 ) -> User | None:

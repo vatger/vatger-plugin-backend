@@ -1,20 +1,21 @@
+from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
-from repositories.mongo.mongo_settings import MongoSettings
 
 
 class Settings(BaseSettings):
-    mongo: MongoSettings = MongoSettings()
+    POSTGRES_DB_URL: str = ""
+    POSTGRES_DB_ECHO: bool = False
+
     redis_url: str = "redis://localhost:6379/0"
 
     datafeed_url: str = "http://df.vatsim-germany.org/datafeed"
 
     PUBLIC_URL: str = "http://localhost:5173"
-    SECRET_KEY: str = "supersecret"
+    JWT_SECRET_KEY: SecretStr = SecretStr("supersecret")
 
     VATSIM_AUTH_URL: str = "https://auth-dev.vatsim.net"
     VATSIM_CLIENT_ID: str = "1363"
-    VATSIM_CLIENT_SECRET: str = "NFCGxEDK9MobuqHmxJWyTpRWsVGacCH0xPptLU4o"
+    VATSIM_CLIENT_SECRET: SecretStr = SecretStr("NFCGxEDK9MobuqHmxJWyTpRWsVGacCH0xPptLU4o")
     VATSIM_REDIRECT_URL: str = "http://localhost:5173/api/v1/auth/callback"
     VATSIM_AUTH_SCOPES: str = "full_name email vatsim_details country"
     VATSIM_AUTH_USERINFO_PATH: str = "api/user"

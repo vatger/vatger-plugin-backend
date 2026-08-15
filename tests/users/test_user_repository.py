@@ -1,0 +1,147 @@
+import uuid
+from contextlib import contextmanager
+
+import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+from sqlmodel import SQLModel
+
+from users.interfaces.user_repository_interface import UserAlreadyExistsError
+from users.user import User
+from users.user_repository import PostgresUserRepository
+
+pytestmark = pytest.mark.unit
+
+
+@pytest.fixture()
+def session():
+    from users.user_model import UserModel as UserSQL  # ruff: ignore[unused-import]
+
+    engine = create_engine("sqlite:///:memory:")
+    SQLModel.metadata.create_all(engine)
+
+    @contextmanager
+    def factory():
+        with Session(engine) as session:
+            yield session
+
+    yield factory
+
+    engine.dispose()
+
+
+@pytest.fixture()
+def repo(session):
+    return PostgresUserRepository(session)
+
+
+def test_add_and_get_user(repo):
+    user = User(
+        id=uuid.uuid4(),
+        cid="1",
+        name="Alice",
+        rating="A",
+        admin=True,
+        access=True,
+    )
+
+    repo.add_user(user)
+
+    fetched = repo.get_user(user.id)
+
+    assert fetched is not None
+    assert fetched.cid == user.cid
+    assert fetched.name == user.name
+    assert fetched.rating == user.rating
+    assert fetched.admin == user.admin
+    assert fetched.access == user.access
+    assert fetched.id == user.id
+
+
+def test_add_and_get_user_by_cid(repo):
+    user = User(
+        id=uuid.uuid4(),
+        cid="1",
+        name="Alice",
+        rating="A",
+        admin=True,
+        access=True,
+    )
+
+    repo.add_user(user)
+
+    fetched = repo.get_user_by_cid("1")
+
+    assert fetched is not None
+    assert fetched.cid == user.cid
+    assert fetched.name == user.name
+    assert fetched.rating == user.rating
+    assert fetched.admin == user.admin
+    assert fetched.access == user.access
+    assert fetched.id == user.id
+
+
+def test_get_user_not_found(repo):
+    result = repo.get_user(uuid.uuid4())
+    assert result is None
+
+
+def test_get_user_by_id_not_found(repo):
+    result = repo.get_user_by_cid("999")
+    assert result is None
+
+
+def test_update_user(repo):
+    user = User(
+        id=uuid.uuid4(),
+        cid="2",
+        name="Bob",
+        rating="B",
+    )
+
+    repo.add_user(user)
+
+    user.name = "Bob Updated"
+    user.rating = "A"
+    user.admin = True
+
+    repo.update_user(user)
+
+    updated = repo.get_user_by_cid("2")
+
+    assert updated.name == "Bob Updated"
+    assert updated.rating == "A"
+    assert updated.admin is True
+
+
+def test_update_user_not_found(repo):
+    user = User(
+        id=uuid.uuid4(),
+        cid="3",
+        name="Charlie",
+        rating="C",
+    )
+
+    with pytest.raises(ValueError):
+        repo.update_user(user)
+
+
+def test_add_user_duplicate_cid(repo):
+    user1 = User(
+        id=uuid.uuid4(),
+        cid="4",
+        name="User1",
+        rating="A",
+    )
+
+    user2 = User(
+        id=uuid.uuid4(),
+        cid="4",  # same cid
+        name="User2",
+        rating="B",
+    )
+
+    repo.add_user(user1)
+
+    with pytest.raises(UserAlreadyExistsError):
+        repo.add_user(user2)

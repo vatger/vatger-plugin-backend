@@ -2,8 +2,8 @@ import logging
 
 from redis.asyncio import Redis
 
+from datafeed.datafeed import ControllerModel, DatafeedModel, PilotModel
 from interfaces.repositories.datafeed_repository_interface import DatafeedRepositoryInterface
-from models.datafeed import ControllerModel, DatafeedModel, PilotModel
 
 logger = logging.getLogger(__name__)
 

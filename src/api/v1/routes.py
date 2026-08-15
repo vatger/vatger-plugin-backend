@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 
-from api.v1 import (
-    auth_controller,
-    datafeed_controller,
-    gdpr_controller,
-    plugin_token_controller,
+from auth.api import auth_controller
+from datafeed.api import datafeed_controller
+from gdpr import gdpr_controller
+from plugin.token.api import plugin_token_controller
+from silent_request.api import (
     silent_request_controller,
 )
 

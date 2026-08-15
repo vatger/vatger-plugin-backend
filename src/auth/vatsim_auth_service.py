@@ -73,7 +73,7 @@ class VatsimAuthService:
             data={
                 "grant_type": "authorization_code",
                 "client_id": settings.VATSIM_CLIENT_ID,
-                "client_secret": settings.VATSIM_CLIENT_SECRET,
+                "client_secret": settings.VATSIM_CLIENT_SECRET.get_secret_value(),
                 "redirect_uri": settings.VATSIM_REDIRECT_URL,
                 "code": code,
             },
