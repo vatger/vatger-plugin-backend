@@ -8,7 +8,7 @@ from silent_request.interfaces.silent_request_repository_interface import (
     DuplicateSilentRequestException,
     SilentRequestRepositoryInterface,
 )
-from silent_request.silent_request_model import SilentRequestModel
+from silent_request.silent_request import SilentRequest
 
 
 class MongoSilentRequestRepository(SilentRequestRepositoryInterface):
@@ -18,8 +18,8 @@ class MongoSilentRequestRepository(SilentRequestRepositoryInterface):
         self.collection.create_index("callsign", unique=True)
         self.collection.create_index("user_id", unique=True)
 
-    def _doc_to_request(self, doc: dict) -> SilentRequestModel:
-        return SilentRequestModel(
+    def _doc_to_request(self, doc: dict) -> SilentRequest:
+        return SilentRequest(
             callsign=doc["callsign"],
             user_id=uuid.UUID(doc["user_id"]),
             departure_icao=doc["departure_icao"],
@@ -27,7 +27,7 @@ class MongoSilentRequestRepository(SilentRequestRepositoryInterface):
             requested_at=doc["requested_at"].replace(tzinfo=UTC),
         )
 
-    def _request_to_doc(self, request: SilentRequestModel) -> dict:
+    def _request_to_doc(self, request: SilentRequest) -> dict:
         return {
             "callsign": request.callsign,
             "user_id": str(request.user_id),
@@ -36,7 +36,7 @@ class MongoSilentRequestRepository(SilentRequestRepositoryInterface):
             "requested_at": request.requested_at,
         }
 
-    def create_request(self, request: SilentRequestModel) -> SilentRequestModel:
+    def create_request(self, request: SilentRequest) -> SilentRequest:
         try:
             self.collection.insert_one(self._request_to_doc(request))
         except DuplicateKeyError:
@@ -44,7 +44,7 @@ class MongoSilentRequestRepository(SilentRequestRepositoryInterface):
         else:
             return request
 
-    def get_request_by_callsign(self, callsign: str) -> SilentRequestModel | None:
+    def get_request_by_callsign(self, callsign: str) -> SilentRequest | None:
         doc = self.collection.find_one({"callsign": callsign})
 
         if not doc:
@@ -52,7 +52,7 @@ class MongoSilentRequestRepository(SilentRequestRepositoryInterface):
 
         return self._doc_to_request(doc)
 
-    def get_request_by_user_id(self, id: uuid.UUID) -> SilentRequestModel | None:
+    def get_request_by_user_id(self, id: uuid.UUID) -> SilentRequest | None:
         doc = self.collection.find_one({"user_id": str(id)})
 
         if not doc:
@@ -60,14 +60,14 @@ class MongoSilentRequestRepository(SilentRequestRepositoryInterface):
 
         return self._doc_to_request(doc)
 
-    def get_requests_by_icao(self, icao: str) -> list[SilentRequestModel] | None:
+    def get_requests_by_icao(self, icao: str) -> list[SilentRequest] | None:
         results = [
             self._doc_to_request(doc) for doc in self.collection.find({"departure_icao": icao})
         ]
 
         return results or None
 
-    def get_all_requests(self) -> list[SilentRequestModel] | None:
+    def get_all_requests(self) -> list[SilentRequest] | None:
         docs = self.collection.find()
 
         if not docs:

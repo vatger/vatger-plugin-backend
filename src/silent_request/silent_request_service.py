@@ -16,7 +16,7 @@ from silent_request.interfaces.silent_request_service_interface import (
     UserMustBeControllerException,
     UserOfflineException,
 )
-from silent_request.silent_request_model import SilentRequestModel
+from silent_request.silent_request import SilentRequest
 from users.user import User
 
 
@@ -31,13 +31,13 @@ class SilentRequestService(SilentRequestServiceInterface):
         self.datafeed_repo = datafeed_repository
         self.allowed_airports = set(allowed_airports) if allowed_airports else None
 
-    def get_requests_by_icao(self, icao: str) -> list[SilentRequestModel]:
+    def get_requests_by_icao(self, icao: str) -> list[SilentRequest]:
         return self.repo.get_requests_by_icao(icao) or []
 
-    def get_all_requests(self) -> list[SilentRequestModel]:
+    def get_all_requests(self) -> list[SilentRequest]:
         return self.repo.get_all_requests() or []
 
-    def get_request_by_user(self, user_id: uuid.UUID) -> SilentRequestModel | None:
+    def get_request_by_user(self, user_id: uuid.UUID) -> SilentRequest | None:
         return self.repo.get_request_by_user_id(user_id)
 
     async def create_request(self, user: User, type: Literal["TAXI", "PUSHBACK"]):
@@ -66,7 +66,7 @@ class SilentRequestService(SilentRequestServiceInterface):
         ):  # if there is an existing request and the callsign has changed
             self.repo.delete_request_by_user(user.id)  # delete old request
 
-        request = SilentRequestModel(
+        request = SilentRequest(
             callsign=pilot.callsign,
             user_id=user.id,
             departure_icao=pilot.flight_plan.departure,

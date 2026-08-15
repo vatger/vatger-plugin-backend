@@ -13,7 +13,7 @@ from silent_request.interfaces.silent_request_service_interface import (
     UserMustBeControllerException,
     UserOfflineException,
 )
-from silent_request.silent_request_model import SilentRequestModel
+from silent_request.silent_request import SilentRequest
 from silent_request.silent_request_service import SilentRequestService
 from tests.mocks.repositories.mock_datafeed_repository import MockDatafeedRepository
 from tests.mocks.repositories.mock_silent_request_repository import MockSilentRequestRepository
@@ -132,7 +132,7 @@ async def test_create_request_raises_when_identical_request_exists(
 
     user = make_user(cid=pilot.cid)
     # create an existing request with the same callsign
-    existing = SilentRequestModel(
+    existing = SilentRequest(
         callsign=pilot.callsign,
         user_id=user.id,
         departure_icao="EDDF",
@@ -156,7 +156,7 @@ async def test_create_request_replaces_request_when_callsign_changed(
     user = make_user(cid=pilot.cid)
     # create an existing request with a different callsign
     old_callsign = "DLH123"
-    old_request = SilentRequestModel(
+    old_request = SilentRequest(
         callsign=old_callsign,
         user_id=user.id,
         departure_icao="EDDM",
@@ -240,14 +240,14 @@ async def test_invalid_airport(service, datafeed_repo, silent_repo):
 
 
 def test_get_requests_by_user_returns_matching_requests(service, silent_repo):
-    r1 = SilentRequestModel(
+    r1 = SilentRequest(
         callsign="DLH1",
         user_id=uuid.uuid4(),
         departure_icao="EDDF",
         type="TAXI",
         requested_at=datetime.now(UTC),
     )
-    r2 = SilentRequestModel(
+    r2 = SilentRequest(
         callsign="BAW1",
         user_id=uuid.uuid4(),
         departure_icao="EGLL",
@@ -266,14 +266,14 @@ def test_get_requests_by_user_returns_matching_requests(service, silent_repo):
 
 
 def test_get_requests_by_icao_returns_matching_requests(service, silent_repo):
-    r1 = SilentRequestModel(
+    r1 = SilentRequest(
         callsign="DLH1",
         user_id=uuid.uuid4(),
         departure_icao="EDDF",
         type="TAXI",
         requested_at=datetime.now(UTC),
     )
-    r2 = SilentRequestModel(
+    r2 = SilentRequest(
         callsign="BAW1",
         user_id=uuid.uuid4(),
         departure_icao="EGLL",
@@ -308,7 +308,7 @@ async def test_delete_own_request_raises_when_no_request_exists(service):
 @pytest.mark.asyncio
 async def test_delete_own_request_removes_the_request(service, silent_repo):
     user = make_user()
-    request = SilentRequestModel(
+    request = SilentRequest(
         callsign="DLH1",
         user_id=user.id,
         departure_icao="EDDF",
@@ -327,7 +327,7 @@ async def test_delete_own_request_does_not_affect_other_users_requests(service, 
     user = make_user(cid=1111111)
     other_user = make_user(cid=2222222)
 
-    r1 = SilentRequestModel(
+    r1 = SilentRequest(
         callsign="DLH1",
         user_id=user.id,
         departure_icao="EDDF",
@@ -335,7 +335,7 @@ async def test_delete_own_request_does_not_affect_other_users_requests(service, 
         requested_at=datetime.now(UTC),
     )
 
-    r2 = SilentRequestModel(
+    r2 = SilentRequest(
         callsign="DLH2",
         user_id=other_user.id,
         departure_icao="EDDF",
@@ -361,7 +361,7 @@ async def test_delete_by_callsign_raises_when_callsign_not_found(service):
 @pytest.mark.asyncio
 async def test_delete_by_callsign_own_callsign_succeeds(service, silent_repo):
     user = make_user()
-    request = SilentRequestModel(
+    request = SilentRequest(
         callsign="DLH123",
         user_id=user.id,
         departure_icao="EDDF",
@@ -383,7 +383,7 @@ async def test_delete_other_users_request_raises_when_actor_offline(
     pilot = make_user(cid=1111111)
     actor = make_user(cid=9999999)  # not in datafeed
 
-    request = SilentRequestModel(
+    request = SilentRequest(
         callsign="DLH123",
         user_id=pilot.id,
         departure_icao="EDDF",
@@ -405,7 +405,7 @@ async def test_delete_other_users_request_raises_when_actor_is_observer(
     owner = make_user(cid=1111111)
     actor = make_user(cid=2222222)
 
-    request = SilentRequestModel(
+    request = SilentRequest(
         callsign="DLH123",
         user_id=owner.id,
         departure_icao="EDDF",
@@ -428,7 +428,7 @@ async def test_delete_other_users_request_succeeds_when_actor_is_controller(
     owner = make_user(cid=1111111)
     actor = make_user(cid=2222222)
 
-    request = SilentRequestModel(
+    request = SilentRequest(
         callsign="DLH123",
         user_id=owner.id,
         departure_icao="EDDF",
@@ -451,7 +451,7 @@ async def test_delete_other_users_request_succeeds_when_actor_is_admin(service, 
     actor = make_user(cid=2222222)
     actor.admin = True
 
-    request = SilentRequestModel(
+    request = SilentRequest(
         callsign="DLH123",
         user_id=owner.id,
         departure_icao="EDDF",
@@ -475,7 +475,7 @@ async def test_admin_can_delete_request_while_offline(service, silent_repo):
     admin = make_user(cid=2222222)
     admin.admin = True
 
-    request = SilentRequestModel(
+    request = SilentRequest(
         callsign="DLH123",
         user_id=owner.id,
         departure_icao="EDDF",

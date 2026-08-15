@@ -8,7 +8,7 @@ from repositories.mongo.silent_request_repository import MongoSilentRequestRepos
 from silent_request.interfaces.silent_request_repository_interface import (
     DuplicateSilentRequestException,
 )
-from silent_request.silent_request_model import SilentRequestModel
+from silent_request.silent_request import SilentRequest
 
 pytestmark = pytest.mark.unit
 
@@ -24,7 +24,7 @@ def repo():
 
 @pytest.fixture
 def sample_request():
-    return SilentRequestModel(
+    return SilentRequest(
         callsign="DLH123",
         user_id=uuid.uuid4(),
         departure_icao="EDDF",
@@ -71,7 +71,7 @@ def test_get_by_user_id_nonexistent(repo):
 def test_create_duplicate_callsign_raises(repo, sample_request):
     repo.create_request(sample_request)
 
-    duplicate = SilentRequestModel(
+    duplicate = SilentRequest(
         callsign=sample_request.callsign,
         user_id=uuid.uuid4(),
         departure_icao="EDDF",
@@ -86,7 +86,7 @@ def test_create_duplicate_callsign_raises(repo, sample_request):
 def test_create_duplicate_user_id_raises(repo, sample_request):
     repo.create_request(sample_request)
 
-    duplicate = SilentRequestModel(
+    duplicate = SilentRequest(
         callsign="EWG123",
         user_id=sample_request.user_id,
         departure_icao="EDDF",
@@ -102,7 +102,7 @@ def test_get_requests_by_icao(repo):
     user1, user2, user3 = uuid.uuid4(), uuid.uuid4(), uuid.uuid4()
 
     repo.create_request(
-        SilentRequestModel(
+        SilentRequest(
             callsign="DLH1",
             user_id=user1,
             departure_icao="EDDF",
@@ -111,7 +111,7 @@ def test_get_requests_by_icao(repo):
         )
     )
     repo.create_request(
-        SilentRequestModel(
+        SilentRequest(
             callsign="DLH2",
             user_id=user2,
             departure_icao="EDDF",
@@ -120,7 +120,7 @@ def test_get_requests_by_icao(repo):
         )
     )
     repo.create_request(
-        SilentRequestModel(
+        SilentRequest(
             callsign="DLH3",
             user_id=user3,
             departure_icao="EDDM",
@@ -147,7 +147,7 @@ def test_get_all_requests(repo):
     user1, user2 = uuid.uuid4(), uuid.uuid4()
 
     r1 = repo.create_request(
-        SilentRequestModel(
+        SilentRequest(
             callsign="DLH1",
             user_id=user1,
             departure_icao="EDDF",
@@ -156,7 +156,7 @@ def test_get_all_requests(repo):
         )
     )
     r2 = repo.create_request(
-        SilentRequestModel(
+        SilentRequest(
             callsign="DLH3",
             user_id=user2,
             departure_icao="EDDF",
@@ -204,7 +204,7 @@ def test_delete_request_nonexistent(repo):
 def test_uuid_serialization(repo):
     user_id = uuid.uuid4()
 
-    request = SilentRequestModel(
+    request = SilentRequest(
         callsign="DLH123",
         user_id=user_id,
         departure_icao="EDDF",
@@ -223,7 +223,7 @@ def test_uuid_serialization(repo):
 def test_datetime_serialization(repo):
     requested_at = datetime(2024, 6, 1, 12, 0, 0, tzinfo=UTC)
 
-    request = SilentRequestModel(
+    request = SilentRequest(
         callsign="DLH123",
         user_id=uuid.uuid4(),
         departure_icao="EDDF",

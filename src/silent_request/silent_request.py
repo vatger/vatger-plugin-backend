@@ -5,7 +5,7 @@ from typing import Literal
 from pydantic import BaseModel
 
 
-class SilentRequestModel(BaseModel):
+class SilentRequest(BaseModel):
     callsign: str
     user_id: uuid.UUID
     departure_icao: str
