@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends
 
 from api.guards import get_user
 from containers.dependencies import DependencyContainer
-from datafeed.api.datafeed_responses import PilotResponse
+from datafeed.api.datafeed_responses import ControllerResponse, PilotResponse
 from interfaces.repositories.datafeed_repository_interface import DatafeedRepositoryInterface
 from users.user import User
 
@@ -27,3 +27,20 @@ async def get_user_pilot_data(
         return
 
     return PilotResponse(**pilot_data.model_dump())
+
+
+@router.get("/user/controller", response_model=ControllerResponse | None)
+@inject
+async def get_user_controller_data(
+    user: Annotated[User, Depends(get_user)],
+    datafeed_repo: Annotated[
+        DatafeedRepositoryInterface,
+        Depends(Provide[DependencyContainer.datafeed_container.datafeed_repository]),
+    ],
+):
+    controller_data = await datafeed_repo.get_controller_by_cid(int(user.cid))
+
+    if not controller_data:
+        return
+
+    return ControllerResponse(**controller_data.model_dump())
