@@ -1,7 +1,6 @@
 from dependency_injector import containers, providers
 from pymongo import MongoClient
 
-from repositories.mongo.plugin_token_repository import MongoPluginTokenRepository
 from repositories.mongo.silent_request_repository import MongoSilentRequestRepository
 
 
@@ -17,17 +16,6 @@ class MongoDBContainer(containers.DeclarativeContainer):
         lambda client, name: client[name],
         mongo_client,
         name=config.mongo.database,
-    )
-
-    # Plugin Token
-
-    plugin_token_collection = providers.Singleton(
-        lambda db: db["plugin-token"],
-        mongo_database,
-    )
-
-    plugin_token_repository = providers.Singleton(
-        MongoPluginTokenRepository, collection=plugin_token_collection
     )
 
     # Silent Request

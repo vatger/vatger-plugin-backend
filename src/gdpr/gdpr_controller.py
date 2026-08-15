@@ -29,7 +29,7 @@ def delete_user(
     ],
     pt_repo: Annotated[
         PluginTokenRepositoryInterface,
-        Depends(Provide(DependencyContainer.mongo_container.plugin_token_repository)),
+        Depends(Provide(DependencyContainer.plugin_token_repository)),
     ],
     sr_repo: Annotated[
         SilentRequestRepositoryInterface,
@@ -74,7 +74,7 @@ def gdpr_get_user_data(
     ],
     pt_repo: Annotated[
         PluginTokenServiceInterface,
-        Depends(Provide(DependencyContainer.mongo_container.plugin_token_repository)),
+        Depends(Provide(DependencyContainer.plugin_token_repository)),
     ],
 ):
     if not settings.GDPR_API_TOKEN:

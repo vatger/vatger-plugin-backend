@@ -5,6 +5,7 @@ from auth.vatsim_auth_service import VatsimAuthService
 from containers.database import Database
 from containers.datafeed import DatafeedContainer
 from containers.mongodb_container import MongoDBContainer
+from plugin.token.plugin_token_repository import PostgresPluginTokenRepository
 from plugin.token.plugin_token_service import PluginTokenService
 from settings import Settings
 from silent_request.silent_request_service import SilentRequestService
@@ -26,6 +27,9 @@ class DependencyContainer(containers.DeclarativeContainer):
     session_factory = db.provided.session
 
     user_repository = providers.Factory(PostgresUserRepository, session_factory=session_factory)
+    plugin_token_repository = providers.Factory(
+        PostgresPluginTokenRepository, session_factory=session_factory
+    )
 
     # OAuth
     vatsim_service = providers.Singleton(VatsimAuthService)
@@ -35,7 +39,7 @@ class DependencyContainer(containers.DeclarativeContainer):
 
     # Plugin Token
     plugin_token_service = providers.Singleton(
-        PluginTokenService, repository=mongo_container.plugin_token_repository
+        PluginTokenService, repository=plugin_token_repository
     )
 
     # SilentRequest
