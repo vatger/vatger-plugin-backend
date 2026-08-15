@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 from api.guards import get_user
 from containers.dependencies import DependencyContainer
 from datafeed.api.datafeed_controller import router
-from datafeed.api.datafeed_responses import PilotDTO
+from datafeed.api.datafeed_responses import PilotResponse
 from datafeed.datafeed import PilotModel
 from tests.mocks.repositories.mock_datafeed_repository import MockDatafeedRepository
 from users.user import User
@@ -135,5 +135,5 @@ def test_response_is_valid_pilot_dto(client, datafeed_repo):
     response = client.get("/datafeed/user/pilot")
 
     assert response.status_code == 200
-    dto = PilotDTO(**response.json())
+    dto = PilotResponse(**response.json())
     assert dto.cid == 1234567

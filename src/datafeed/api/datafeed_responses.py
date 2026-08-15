@@ -4,8 +4,8 @@ from typing import Literal
 from pydantic import BaseModel
 
 
-class PilotDTO(BaseModel):
-    class FlightPlanDTO(BaseModel):
+class PilotResponse(BaseModel):
+    class FlightPlanResponse(BaseModel):
         flight_rules: Literal["I", "V"]
         aircraft: str
         aircraft_faa: str
@@ -28,6 +28,6 @@ class PilotDTO(BaseModel):
     heading: int
     qnh_i_hg: float
     qnh_mb: int
-    flight_plan: FlightPlanDTO | None = None
+    flight_plan: FlightPlanResponse | None = None
     logon_time: datetime
     last_updated: datetime
