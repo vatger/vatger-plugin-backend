@@ -14,6 +14,7 @@ sys.path.insert(0, SRC_DIR)
 
 from src.users.user_model import UserModel  # ruff: ignore[module-import-not-at-top-of-file, unsorted-imports, unused-import]
 from src.plugin.token.plugin_token_model import PluginTokenModel  # ruff: ignore[module-import-not-at-top-of-file, unsorted-imports, unused-import]
+from src.silent_request.silent_request_model import SilentRequestModel  # ruff: ignore[module-import-not-at-top-of-file, unsorted-imports, unused-import]
 from src.settings import Settings  # ruff: ignore[module-import-not-at-top-of-file]
 
 settings = Settings()
