@@ -7,32 +7,48 @@ services:
       - "8022:8000"
     restart: unless-stopped
     environment:
-      MONGO_URI: mongodb://mongo:27017
-      MONGO_DATABASE: vtfdps-dev
+      POSTGRES_DB_URL:
+      POSTGRES_DB_ECHO:
       REDIS_URL: redis://redis:6379/0
+      DATAFEED_URL:
+      PUBLIC_URL:
+      JWT_SECRET_KEY:
+      VATSIM_AUTH_URL:
+      VATSIM_CLIENT_ID:
+      VATSIM_CLIENT_SECRET:
+      VATSIM_REDIRECT_URL:
+      VATSIM_AUTH_SCOPES:
+      VATSIM_AUTH_USERINFO_PATH:
+      COOKIE_NAME_ACCESS:
+      COOKIE_NAME_REFRESH:
+      SILENT_REQUEST_ALLOWED_AIRPORTS:
+      GDPR_API_TOKEN:
     depends_on:
-      redis:
-        condition: service_healthy
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: >
+      sh -c "
+      alembic upgrade head &&
+      uvicorn api.app:app --host 0.0.0.0 --port 8000 --app-dir src"
 
   db:
-    image: postgres:15
+    image: postgres:18.6
     restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB_URL:
       POSTGRES_USER:
       POSTGRES_PASSWORD:
       POSTGRES_DB:
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER"]
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
       interval: 10s
       timeout: 3s
-      retries: 3
+      retries: 5
 
 
   worker:
@@ -43,7 +59,10 @@ services:
     command: taskiq worker app.tkq:broker
     environment:
       REDIS_URL: redis://redis:6379/0
+      DATAFEED_URL:
     depends_on:
+      db:
+        condition: service_healthy
       redis:
         condition: service_healthy
 
@@ -73,14 +92,6 @@ services:
       timeout: 3s
       retries: 5
 
-  mongo:
-    image: mongo:8
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-
   frontend:
     image: ghcr.io/vatger/vatger-plugin-frontend:latest
     container_name: vatger-plugin-frontend
@@ -90,5 +101,4 @@ services:
       - backend
 
 volumes:
-  mongo_data:
   postgres_data:
