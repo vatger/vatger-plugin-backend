@@ -15,6 +15,8 @@ pytestmark = pytest.mark.unit
 def mock_user():
     user = MagicMock()
     user.cid = "1234567"
+    user.name = "Max Mustermann"
+    user.rating = "S3"
     user.access = True
     user.admin = False
     return user

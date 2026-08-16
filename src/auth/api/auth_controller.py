@@ -6,7 +6,7 @@ from fastapi.responses import RedirectResponse
 from jose import JWTError
 
 from api.guards import get_user
-from auth.api.auth_responses import UserInfoDTO
+from auth.api.auth_responses import UserInfoResponse
 from auth.auth_service import AuthService
 from auth.generate_jwt import create_access_token, create_refresh_token, decode_token
 from containers.dependencies import DependencyContainer
@@ -67,8 +67,10 @@ def vatsim_connect_callback(
 )
 def get_user_endpoint(
     user: Annotated[User, Depends(get_user)],
-) -> UserInfoDTO:
-    return UserInfoDTO(cid=user.cid, access=user.access, admin=user.admin)
+) -> UserInfoResponse:
+    return UserInfoResponse(
+        cid=user.cid, name=user.name, rating=user.rating, access=user.access, admin=user.admin
+    )
 
 
 @router.post(
