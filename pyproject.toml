@@ -20,6 +20,7 @@ dependencies = [
     "sqlalchemy>=2.0.51",
     "sqlmodel>=0.0.39",
     "psycopg2-binary>=2.9.12",
+    "httpx2>=2.10.0",
 ]
 
 [dependency-groups]
