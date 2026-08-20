@@ -63,6 +63,10 @@ def test_returns_pilot_data_for_authenticated_user(client, datafeed_repo):
     assert response.status_code == 200
     assert response.json()["cid"] == 1234567
     assert response.json()["callsign"] == "DLH123"
+    assert response.json()["name"] is not None
+    assert response.json()["transponder"] is not None
+    assert response.json()["server"] is not None
+    assert response.json()["flight_plan"]["aircraft_short"] is not None
 
 
 def test_returns_correct_pilot_fields(client, datafeed_repo):
