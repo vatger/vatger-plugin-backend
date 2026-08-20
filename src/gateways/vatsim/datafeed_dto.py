@@ -16,6 +16,7 @@ class DatafeedPilotModel(BaseModel):
         flight_rules: Literal["I", "V"]
         aircraft: str
         aircraft_faa: str
+        aircraft_short: str
         departure: str
         arrival: str
         alternate: str

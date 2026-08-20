@@ -9,7 +9,8 @@ from api.guards import get_user
 from containers.dependencies import DependencyContainer
 from datafeed.api.datafeed_controller import router
 from datafeed.api.datafeed_responses import ControllerResponse, PilotResponse
-from datafeed.datafeed import ControllerModel, PilotModel
+from datafeed.datafeed import ControllerModel
+from tests.datafeed.utils import make_pilot
 from tests.mocks.repositories.mock_datafeed_repository import MockDatafeedRepository
 from users.user import User
 
@@ -19,42 +20,6 @@ pytestmark = pytest.mark.unit
 @pytest.fixture
 def datafeed_repo():
     return MockDatafeedRepository()
-
-
-def make_pilot(cid: int = 1234567, callsign: str = "DLH123", flight_plan=True) -> PilotModel:
-    return PilotModel(
-        cid=cid,
-        callsign=callsign,
-        latitude=50.0,
-        longitude=8.0,
-        altitude=35000,
-        groundspeed=450,
-        heading=270,
-        qnh_i_hg=29.92,
-        qnh_mb=1013,
-        flight_plan=make_flight_plan() if flight_plan else None,
-        logon_time=datetime.now(UTC),
-        last_updated=datetime.now(UTC),
-    )
-
-
-def make_flight_plan(**overrides) -> PilotModel.FlightPlanModel:
-    defaults = {
-        "flight_rules": "I",
-        "aircraft": "B738",
-        "aircraft_faa": "B738/L",
-        "departure": "EDDF",
-        "arrival": "EGLL",
-        "alternate": "EGLC",
-        "deptime": "",
-        "enroute_time": "",
-        "fuel_time": "",
-        "remarks": "",
-        "route": "",
-        "revision_id": 1,
-    }
-    defaults.update(overrides)
-    return PilotModel.FlightPlanModel(**defaults)
 
 
 def make_user(cid: int = 1234567, user_id: uuid.UUID | None = None) -> User:
@@ -98,6 +63,10 @@ def test_returns_pilot_data_for_authenticated_user(client, datafeed_repo):
     assert response.status_code == 200
     assert response.json()["cid"] == 1234567
     assert response.json()["callsign"] == "DLH123"
+    assert response.json()["name"] is not None
+    assert response.json()["transponder"] is not None
+    assert response.json()["server"] is not None
+    assert response.json()["flight_plan"]["aircraft_short"] is not None
 
 
 def test_returns_correct_pilot_fields(client, datafeed_repo):

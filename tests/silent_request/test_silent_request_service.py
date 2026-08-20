@@ -3,7 +3,6 @@ from datetime import UTC, datetime
 
 import pytest
 
-from datafeed.datafeed import ControllerModel, PilotModel
 from silent_request.interfaces.silent_request_service_interface import (
     ControllerOfflineException,
     ExistingRequestException,
@@ -15,6 +14,7 @@ from silent_request.interfaces.silent_request_service_interface import (
 )
 from silent_request.silent_request import SilentRequest
 from silent_request.silent_request_service import SilentRequestService
+from tests.datafeed.utils import make_controller, make_pilot
 from tests.mocks.repositories.mock_datafeed_repository import MockDatafeedRepository
 from tests.mocks.repositories.mock_silent_request_repository import MockSilentRequestRepository
 from users.user import User
@@ -32,57 +32,6 @@ def make_user(cid: int = 1234567, user_id: uuid.UUID | None = None) -> User:
         name="",
         rating="S2",
         access=True,
-    )
-
-
-def make_flight_plan(**overrides) -> PilotModel.FlightPlanModel:
-    defaults = {
-        "flight_rules": "I",
-        "aircraft": "B738",
-        "aircraft_faa": "B738/L",
-        "departure": "EDDF",
-        "arrival": "EGLL",
-        "alternate": "EGLC",
-        "deptime": "",
-        "enroute_time": "",
-        "fuel_time": "",
-        "remarks": "",
-        "route": "",
-        "revision_id": 1,
-    }
-    defaults.update(overrides)
-    return PilotModel.FlightPlanModel(**defaults)
-
-
-def make_pilot(cid: int = 1234567, callsign: str = "DLH123", flight_plan=True) -> PilotModel:
-    return PilotModel(
-        cid=cid,
-        callsign=callsign,
-        latitude=50.0,
-        longitude=8.0,
-        altitude=35000,
-        groundspeed=450,
-        heading=270,
-        qnh_i_hg=29.92,
-        qnh_mb=1013,
-        flight_plan=make_flight_plan() if flight_plan else None,
-        logon_time=datetime.now(UTC),
-        last_updated=datetime.now(UTC),
-    )
-
-
-def make_controller(cid: int, facility: int = 1) -> ControllerModel:
-    return ControllerModel(
-        cid=cid,
-        name="",
-        callsign="EDDF_DEL",
-        facility=facility,
-        frequency="125.250",
-        rating=3,
-        server="",
-        visual_range=50,
-        logon_time=datetime.now(UTC),
-        last_updated=datetime.now(UTC),
     )
 
 
@@ -114,7 +63,7 @@ async def test_create_request_raises_when_user_offline(service):
 
 @pytest.mark.asyncio
 async def test_create_request_raises_when_no_flight_plan(service, datafeed_repo):
-    pilot = make_pilot(flight_plan=False)
+    pilot = make_pilot(flight_plan=None)
 
     datafeed_repo.add_pilot(pilot)
 
@@ -414,7 +363,7 @@ async def test_delete_other_users_request_raises_when_actor_is_observer(
     )
     silent_repo.create_request(request)
 
-    datafeed_repo.add_controller(make_controller(actor.cid, facility=0))
+    datafeed_repo.add_controller(make_controller(cid=actor.cid, facility=0))
 
     with pytest.raises(UserMustBeControllerException):
         await service.delete_request(actor=actor, target_callsign="DLH123")
@@ -437,7 +386,7 @@ async def test_delete_other_users_request_succeeds_when_actor_is_controller(
     )
     silent_repo.create_request(request)
 
-    datafeed_repo.add_controller(make_controller(actor.cid, facility=1))
+    datafeed_repo.add_controller(make_controller(cid=actor.cid, facility=1))
 
     await service.delete_request(actor=actor, target_callsign="DLH123")
 
