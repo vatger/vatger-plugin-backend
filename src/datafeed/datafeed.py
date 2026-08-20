@@ -10,6 +10,7 @@ class PilotModel(BaseModel):
         flight_rules: Literal["I", "V"]
         aircraft: str
         aircraft_faa: str
+        aircraft_short: str
         departure: str
         arrival: str
         alternate: str
@@ -19,13 +20,19 @@ class PilotModel(BaseModel):
         remarks: str
         route: str
         revision_id: int
+        assigned_transponder: str
 
     cid: int
+    name: str
     callsign: str
+    server: str
+    pilot_rating: int
+    military_rating: int
     latitude: float
     longitude: float
     altitude: int
     groundspeed: int
+    transponder: str
     heading: int
     qnh_i_hg: float
     qnh_mb: int
