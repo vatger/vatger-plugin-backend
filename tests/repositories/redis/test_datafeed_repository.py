@@ -1,10 +1,9 @@
-from datetime import UTC, datetime
-
 import fakeredis
 import pytest
 
 from datafeed.datafeed import ControllerModel, DatafeedModel, PilotModel
 from repositories.redis.datafeed_repository import RedisDatafeedRepository
+from tests.datafeed.utils import make_controller, make_pilot
 
 
 @pytest.fixture
@@ -15,49 +14,6 @@ def redis_client():
 @pytest.fixture
 def repository(redis_client):
     return RedisDatafeedRepository(redis_client)
-
-
-def make_pilot(**overrides) -> PilotModel:
-    now = datetime.now(UTC)
-
-    data = {
-        "cid": 90001,
-        "callsign": "TEST123",
-        "latitude": 51.0,
-        "longitude": 8.0,
-        "altitude": 30000,
-        "groundspeed": 450,
-        "heading": 180,
-        "qnh_i_hg": 29.92,
-        "qnh_mb": 1013,
-        "flight_plan": None,
-        "logon_time": now,
-        "last_updated": now,
-    }
-
-    data.update(overrides)
-    return PilotModel.model_validate(data)
-
-
-def make_controller(**overrides) -> ControllerModel:
-    now = datetime.now(UTC)
-
-    data = {
-        "cid": 1000001,
-        "name": "Max Mustermann",
-        "callsign": "EDDF_APP",
-        "frequency": "120.800",
-        "facility": 5,
-        "rating": 5,
-        "server": "EDDF",
-        "visual_range": 200,
-        "text_atis": None,
-        "logon_time": now,
-        "last_updated": now,
-    }
-
-    data.update(overrides)
-    return ControllerModel.model_validate(data)
 
 
 def make_feed(
