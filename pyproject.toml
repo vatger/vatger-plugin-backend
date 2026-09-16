@@ -19,7 +19,7 @@ dependencies = [
     "alembic>=1.18.5",
     "sqlalchemy>=2.0.51",
     "sqlmodel>=0.0.42",
-    "psycopg2-binary>=2.9.12",
+    "psycopg2-binary>=2.9.13",
     "httpx2>=2.12.0",
 ]
 
